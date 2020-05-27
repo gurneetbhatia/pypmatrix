@@ -50,6 +50,28 @@ class Matrix(object):
     def __init__(self, rows, cols, fill=0):
         self.elements = [[fill for col in range(cols)] for row in range(rows)]
 
+    def col(self, n):
+        # returns an iterator over the specified column
+        return iter(self.col_aslist(n))
+
+    def col_aslist(self, n):
+        # returns the specified column as a list
+        return [row[col] for row in self.elements]
+
+    def cols(self):
+        # returns an iterator over each column (which itself is an iterator)
+        cols_list = list(map(iter, self.trans().elements))
+        return iter(cols_list)
+
+    def cols_aslist(self):
+        # returns all the columns as a 2D list
+        return self.trans()
+
+    def colvec(self, col):
+        # returns the specified column as a vector
+        el_list = [[row[col]] for row in self.elements]
+        return Matrix.from_list(el_list)
+
     def copy(self):
         return self
 
@@ -111,5 +133,5 @@ el_list = [
 ]
 matrix = Matrix.from_list(el_list)
 # print(matrix.trans().elements)
-print(matrix.det())
-# print(matrix.copy().elements)
+# print(matrix.det())
+print(matrix.colvec(1).elements)
