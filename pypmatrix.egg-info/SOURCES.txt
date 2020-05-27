@@ -1,0 +1,8 @@
+README.md
+setup.py
+pypmatrix/__init__.py
+pypmatrix.egg-info/PKG-INFO
+pypmatrix.egg-info/SOURCES.txt
+pypmatrix.egg-info/dependency_links.txt
+pypmatrix.egg-info/not-zip-safe
+pypmatrix.egg-info/top_level.txt
