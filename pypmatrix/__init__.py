@@ -50,10 +50,18 @@ class Matrix(object):
     def __init__(self, rows, cols, fill=0):
         self.elements = [[fill for col in range(cols)] for row in range(rows)]
 
-    def cofactor(self, row, col):
-        # returns the specified cofactor
-        i, j = row+1, col+1
-        return pow(i, j) * self.minor(row, col)
+    def copy(self):
+        return self
+
+    def del_col(self, col):
+        el_list = list(map(
+        lambda row: row[:col]+row[col+1], self.elements
+        ))
+        return Matrix.from_list(el_list)
+
+    def del_row(self, row):
+        el_list = self.elements[:row] + self.elements[row+1:]
+        return Matrix.from_list(el_list)
 
     def det(self):
         # returns the determinant of the matrix if it is square
@@ -104,4 +112,5 @@ el_list = [
 ]
 matrix = Matrix.from_list(el_list)
 # print(matrix.trans().elements)
-print(matrix.det())
+# print(matrix.det())
+print(matrix.copy().elements)
