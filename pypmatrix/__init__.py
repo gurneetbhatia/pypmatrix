@@ -46,15 +46,15 @@ class Matrix(object):
 
     def trans(self):
         # returns the transpose of the matrix
-        m = Matrix(len(self.elements), len(self.elements[0]))
+        m = Matrix(len(self.elements[0]), len(self.elements))
         for (rowindex, row) in enumerate(self.elements):
             for (colindex, el) in enumerate(row):
                 m.elements[colindex][rowindex] = el
         return m
 
 el_list = [
-[1,2,3],
-[4,5,6],
-[7,8,9]
+[1,2],
+[4,5],
+[7,8]
 ]
 print(Matrix.from_list(el_list).trans().elements)
