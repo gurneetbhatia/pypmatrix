@@ -55,7 +55,7 @@ class Matrix(object):
 
     def del_col(self, col):
         el_list = list(map(
-        lambda row: row[:col]+row[col+1], self.elements
+        lambda row: row[:col]+row[col+1:], self.elements
         ))
         return Matrix.from_list(el_list)
 
@@ -77,13 +77,13 @@ class Matrix(object):
                 for (index, value) in enumerate(self.elements[0]):
                     # iterate through the top row of the matrix
                     # take out the top row from the matrix copy
-                    submatrix = self.elements[1:]
+                    submatrix = self.del_row(0)
+                    # submatrix = self.elements[1:]
                     # take out the current column (index) from the matrix
-                    submatrix = list(map(
-                    lambda row: row[:index]+row[index+1:], submatrix))
-                    s = "+" if pow(-1, index) == 1 else "-"
-                    determinant += (pow(-1, index) * value *
-                                    Matrix.from_list(submatrix).det())
+                    #submatrix = list(map(
+                    #lambda row: row[:index]+row[index+1:], submatrix))
+                    submatrix = submatrix.del_col(index)
+                    determinant += (pow(-1, index) * value * submatrix.det())
                 return determinant
         else:
             raise MatrixNotSquareError
@@ -105,12 +105,11 @@ class Matrix(object):
         return m
 
 el_list = [
-[1,34,57,6],
-[762,6,10,100],
-[828,2,18,990],
-[9,100,7628,9292]
+[1,2,6],
+[4,5,6],
+[7,8,9]
 ]
 matrix = Matrix.from_list(el_list)
 # print(matrix.trans().elements)
-# print(matrix.det())
-print(matrix.copy().elements)
+print(matrix.det())
+# print(matrix.copy().elements)
