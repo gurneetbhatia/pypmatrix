@@ -115,19 +115,31 @@ class Matrix(object):
         else:
             raise MatrixNotSquareError
 
+    def dir(self):
+        # vectors only. returns the unit vector
+        pass
+
     def dot(self, other):
-        # returns the dot product of the object and 'other'
-        n1, m1 = self.size()
-        n2, m2 = other.size()
-        if m1 == n2:
-            # a dot product can be computed
-            el_list = [[sum(starmap(mul, zip(row, col)))
-            for col in zip(*other.elements)] for row in self.elements]
-            return Matrix.from_list(el_list)
+        # returns the dot product of the object and 'other' if 'other' is matrix
+        # otherwise it returns the scalar product assuming it is a real number
+        if type(other) == Matrix:
+            n1, m1 = self.size()
+            n2, m2 = other.size()
+            if m1 == n2:
+                # a dot product can be computed
+                el_list = [[sum(starmap(mul, zip(row, col)))
+                for col in zip(*other.elements)] for row in self.elements]
+                return Matrix.from_list(el_list)
+            else:
+                # a dot product cannot be computed
+                raise MatrixError("Number of columns in the first matrix need"+
+                "to equal to the number of rows in the second matrix!")
         else:
-            # a dot product cannot be computed
-            raise MatrixError("Number of columns in the first matrix need to"+
-            " equal to the number of rows in the second matrix!")
+            # work under the assumption that the type is a real Number
+            # if the operation is not possible, python will raise the apt err
+            el_list = [list(map(lambda el: other*el, row))
+            for row in self.elements]
+            return Matrix.from_list(el_list)
 
     def is_square(self):
         # returns true or false to indicate whether a matrix is square or not
@@ -176,4 +188,4 @@ matrix2 = Matrix.from_list([
 ])
 
 #print(matrix1.dot(matrix2).elements)
-print(matrix1.magnitude())
+print(matrix2.magnitude())
