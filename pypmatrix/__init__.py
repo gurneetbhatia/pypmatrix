@@ -117,7 +117,12 @@ class Matrix(object):
 
     def dir(self):
         # vectors only. returns the unit vector
-        pass
+        if self.is_vector():
+            magnitude = self.magnitude()
+            # divide each component of the vector by the magnitude
+            return self.dot(1/magnitude)
+        else:
+            raise MatrixNotVectorError
 
     def dot(self, other):
         # returns the dot product of the object and 'other' if 'other' is matrix
@@ -151,7 +156,6 @@ class Matrix(object):
 
     def magnitude(self):
         # returns the magnitude of a matrix if it is a vector
-        print("here",self.trans().dot(self).elements)
         if self.is_vector():
             return pow(self.trans().dot(self).elements[0][0], 0.5)
         else:
