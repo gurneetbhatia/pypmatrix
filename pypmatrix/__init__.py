@@ -24,6 +24,12 @@ class MatrixNotSquareError(MatrixError):
     def __init__(self, message="Matrix not square!"):
         super().__init__(message)
 
+class MatrixNotVectorError(MatrixError):
+    """raised when you try carrying out an operation that only works on vectors
+    on a non-vector matrix"""
+    def __init__(self, message="Matrix needs to be a vector for this operation!"):
+        super().__init__(message)
+
 class Matrix(object):
     @staticmethod
     def from_list(el_list):
@@ -133,7 +139,11 @@ class Matrix(object):
 
     def magnitude(self):
         # returns the magnitude of a matrix if it is a vector
-        pass
+        print("here",self.trans().dot(self).elements)
+        if self.is_vector():
+            return pow(self.trans().dot(self).elements[0][0], 0.5)
+        else:
+            raise MatrixNotVectorError
 
     def size(self):
         # returns a tuple with number of rows followed by number of columns
@@ -155,7 +165,7 @@ el_list = [
 matrix = Matrix.from_list(el_list)
 # print(matrix.trans().elements)
 # print(matrix.det())
-print(matrix.colvec(1).elements)
+# print(matrix.colvec(1).elements)
 matrix1 = Matrix.from_list([
 [1,2]
 ])
@@ -165,4 +175,5 @@ matrix2 = Matrix.from_list([
 [6]
 ])
 
-print(matrix1.dot(matrix2).elements)
+#print(matrix1.dot(matrix2).elements)
+print(matrix1.magnitude())
