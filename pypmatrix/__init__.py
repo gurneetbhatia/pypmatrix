@@ -181,6 +181,13 @@ class Matrix(object):
         # returns True if the matrix is a vector
         return False not in [len(row) == 1 for row in self.elements]
 
+    def len(self):
+        # vectors only. returns the length of the vector
+        if self.is_vector():
+            return self.size()[0]
+        else:
+            raise MatrixNotVectorError
+
     def magnitude(self):
         # returns the magnitude of a matrix if it is a vector
         if self.is_vector():
