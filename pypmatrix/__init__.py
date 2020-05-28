@@ -188,6 +188,12 @@ class Matrix(object):
         else:
             raise MatrixNotVectorError
 
+    def map(self, func):
+        # returns a new matrix formed by mapping func to each element
+        matrix = self.copy()
+        matrix = [list(map(func, row)) for row in self.elements]
+        return matrix
+
     def magnitude(self):
         # returns the magnitude of a matrix if it is a vector
         if self.is_vector():
