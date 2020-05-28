@@ -146,6 +146,33 @@ class Matrix(object):
             for row in self.elements]
             return Matrix.from_list(el_list)
 
+    def equals(self, other, delta=None):
+        # if delta is None, two matrices are equal if they are the same size
+        # and their corresponding elements are equal
+        # if delta is not None, two matrices are equal if they are the same size
+        # and their corresponding elements agree within delta
+        if self.size() == other.size():
+            if delta is None:
+                inequal = False
+                for (index, row) in enumerate(self.elements):
+                    if row != other.elements[index]:
+                        inequal = True
+                        break
+                return not inequal
+            else:
+                delta = abs(delta)
+                out_of_range = False
+                for (i, row) in enumerate(self.elements):
+                    for (j, el) in enumerate(row):
+
+                        if (abs(el - other.elements[i][j]) > delta):
+                            out_of_range = True
+                            break
+                    if out_of_range:
+                        break
+                return not out_of_range
+        return False
+
     def is_square(self):
         # returns true or false to indicate whether a matrix is square or not
         return len(self.elements) == len(self.elements[0])
@@ -179,6 +206,12 @@ el_list = [
 [7,8,9]
 ]
 matrix = Matrix.from_list(el_list)
+el_list1 = [
+[-1,3,5],
+[4,4,4],
+[9,10,8]
+]
+matrix3 = Matrix.from_list(el_list1)
 # print(matrix.trans().elements)
 # print(matrix.det())
 # print(matrix.colvec(1).elements)
