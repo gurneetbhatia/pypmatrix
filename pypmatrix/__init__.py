@@ -1,9 +1,11 @@
 from fractions import Fraction as frac
-
+from itertools import starmap
+from operator import mul
 
 class MatrixError(Exception):
     """Base class for other exceptions"""
-    pass
+    def __init__(self, message):
+        super().__init__(message)
 
 class InequalRowLengthsError(MatrixError):
     """Raised when the row lengths are not all the same"""
@@ -100,19 +102,38 @@ class Matrix(object):
                     # iterate through the top row of the matrix
                     # take out the top row from the matrix copy
                     submatrix = self.del_row(0)
-                    # submatrix = self.elements[1:]
                     # take out the current column (index) from the matrix
-                    #submatrix = list(map(
-                    #lambda row: row[:index]+row[index+1:], submatrix))
                     submatrix = submatrix.del_col(index)
                     determinant += (pow(-1, index) * value * submatrix.det())
                 return determinant
         else:
             raise MatrixNotSquareError
 
+    def dot(self, other):
+        # returns the dot product of the object and 'other'
+        n1, m1 = self.size()
+        n2, m2 = other.size()
+        if m1 == n2:
+            # a dot product can be computed
+            el_list = [[sum(starmap(mul, zip(row, col)))
+            for col in zip(*other.elements)] for row in self.elements]
+            return Matrix.from_list(el_list)
+        else:
+            # a dot product cannot be computed
+            raise MatrixError("Number of columns in the first matrix need to"+
+            " equal to the number of rows in the second matrix!")
+
     def is_square(self):
         # returns true or false to indicate whether a matrix is square or not
         return len(self.elements) == len(self.elements[0])
+
+    def is_vector(self):
+        # returns True if the matrix is a vector
+        return False not in [len(row) == 1 for row in self.elements]
+
+    def magnitude(self):
+        # returns the magnitude of a matrix if it is a vector
+        pass
 
     def size(self):
         # returns a tuple with number of rows followed by number of columns
@@ -135,3 +156,13 @@ matrix = Matrix.from_list(el_list)
 # print(matrix.trans().elements)
 # print(matrix.det())
 print(matrix.colvec(1).elements)
+matrix1 = Matrix.from_list([
+[1,2]
+])
+matrix2 = Matrix.from_list([
+[4],
+[5],
+[6]
+])
+
+print(matrix1.dot(matrix2).elements)
