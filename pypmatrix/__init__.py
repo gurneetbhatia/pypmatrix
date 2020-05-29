@@ -58,6 +58,16 @@ class Matrix(object):
     def __init__(self, rows, cols, fill=0):
         self.elements = [[fill for col in range(cols)] for row in range(rows)]
 
+    def cofactor(self, row, col):
+        # returns the specified cofactor
+        return pow(-1, row + col) * self.minor(row, col)
+
+    def cofactors(self):
+        m = self.copy()
+        for row, col, element in self:
+            m[row][col] = self.cofactor(row, col)
+        return m
+
     def col(self, n):
         # returns an iterator over the specified column
         return iter(self.col_aslist(n))
@@ -200,6 +210,10 @@ class Matrix(object):
             return pow(self.trans().dot(self).elements[0][0], 0.5)
         else:
             raise MatrixNotVectorError
+
+    def minor(self, row, col):
+        # returns the specified minor of the matrix
+        self.del_row(row).del_col(col).det()
 
     def size(self):
         # returns a tuple with number of rows followed by number of columns
