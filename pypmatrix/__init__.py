@@ -58,6 +58,10 @@ class Matrix(object):
     def __init__(self, rows, cols, fill=0):
         self.elements = [[fill for col in range(cols)] for row in range(rows)]
 
+    def adjoint(self):
+        # returns the adjoint of the matrix
+        return self.cofactors().trans()
+
     def cofactor(self, row, col):
         # returns the specified cofactor
         return pow(-1, row + col) * self.minor(row, col)
@@ -83,7 +87,7 @@ class Matrix(object):
 
     def cols_aslist(self):
         # returns all the columns as a 2D list
-        return self.trans()
+        return self.trans().elements
 
     def colvec(self, col):
         # returns the specified column as a vector
@@ -92,6 +96,25 @@ class Matrix(object):
 
     def copy(self):
         return self
+
+    def cross(self, other):
+        # find the cross product between two 3D vectors
+        if (self.is_vector() and other.is_vector() and self.size() == (3, 1) and other.size() == (3, 1)):
+            el_list = [
+            [1, 1, 1],
+            self.cols_aslist()[0],
+            other.cols_aslist()[0]
+            ]
+            matrix = Matrix.from_list(el_list)
+            out_list = [
+            [matrix.minor(0, 0)],
+            [-1 * matrix.minor(0, 1)],
+            [matrix.minor(0, 2)]
+            ]
+            return Matrix.from_list(out_list)
+        else:
+            raise MatrixError("Matrices need to be 3D vectors for cross product!")
+
 
     def del_col(self, col):
         el_list = list(map(
@@ -213,7 +236,7 @@ class Matrix(object):
 
     def minor(self, row, col):
         # returns the specified minor of the matrix
-        self.del_row(row).del_col(col).det()
+        return self.del_row(row).del_col(col).det()
 
     def size(self):
         # returns a tuple with number of rows followed by number of columns
@@ -243,12 +266,14 @@ matrix3 = Matrix.from_list(el_list1)
 # print(matrix.det())
 # print(matrix.colvec(1).elements)
 matrix1 = Matrix.from_list([
-[1,2]
+[-3],
+[4],
+[1]
 ])
 matrix2 = Matrix.from_list([
-[4],
-[5],
-[6]
+[2],
+[1],
+[-1]
 ])
 
 #print(matrix1.dot(matrix2).elements)
